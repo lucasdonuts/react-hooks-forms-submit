@@ -1,28 +1,30 @@
 import React, { useState } from "react";
 
-function Form(props) {
-  const [ firstName, setFirstName ] = useState( "Sylvia" );
-  const [ lastName, setLastName ] = useState( "Woods" );
+function Form() {
   const [submittedData, setSubmittedData] = useState( [] );
   const [errors, setErrors] = useState( [] );
+  const [ formData, setFormData] = useState( {
+    firstName: 'Sylvia',
+    lastName: 'Woods'
+  } );
 
-  function handleFirstNameChange(event) {
-    setFirstName( event.target.value );
-  }
-
-  function handleLastNameChange(event) {
-    setLastName( event.target.value );
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if ( firstName.length > 0 && lastName.length > 0 ) {
-      const formData = { firstName: firstName, lastName: lastName };
+    if ( formData.firstName.length > 0 && formData.lastName.length > 0 ) {
       const dataArray = [...submittedData, formData];
       setSubmittedData(dataArray);
-      setFirstName('');
-      setLastName('');
+      setFormData({
+        firstName: '',
+        lastName: ''
+      })
     } else {
       setErrors([ 'First and Last name required' ]);
     }
@@ -39,8 +41,8 @@ function Form(props) {
   return (
     <div>
       <form onSubmit={ handleSubmit }>
-        <input type="text" onChange={ handleFirstNameChange } value={ firstName } />
-        <input type="text" onChange={ handleLastNameChange } value={ lastName } />
+        <input type="text" name="firstName" onChange={ handleChange } value={ formData.firstName } />
+        <input type="text" name="lastName" onChange={ handleChange } value={ formData.lastName } />
         <button type="submit">Submit</button>
       </form>
       { errors.length > 0
